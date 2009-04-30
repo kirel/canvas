@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Canvas experiments</title>
+<script src="http://www.google.com/jsapi"></script>
+</head>
+<body>
+<h1>Eine Tafel zum malen...</h1>
+<canvas id="tafel" width="400" height="400" style="border:solid 1px black;">
+...aber du siehst sie nicht
+</canvas>
+<div id="info"></div>
+<script>
+  // Load jQuery
+  google.load("jquery", "1");
+  google.setOnLoadCallback(function() {
+    var c = $("#tafel").get(0);
+    var i = $("#info");
+    i.text("Initialisiere Canvas...");
+    var ctx = c.getContext('2d');
+    ctx.strokeStyle = "rgb(255, 0, 255)";
+    ctx.lineWidth = 5;
+    i.text("Konstruiere Programmlogik...");
+    var draw = false;
+    var start = function(evt) {
+      draw = true;
+      i.text("(!) Male...");
+      var x,y;
+      x = evt.pageX - $(this).offset().left;
+      y = evt.pageY - $(this).offset().top;
+      ctx.moveTo(x, y);
+    }
+    var middle = function(evt) {
+      if (draw) {
+        i.text("(!) Mitte.");
+        var x,y;
+        x = evt.pageX - $(this).offset().left;
+        y = evt.pageY - $(this).offset().top;
+        ctx.lineTo(x, y);
+        ctx.stroke();
+      }
+    }
+    var stop = function(evt) {
+      if (draw) {
+        i.text("(!) Stoppe.");
+        draw = false;
+        i.text("(!) Gestoppt.");
+      }
+    }
+    i.text("Registriere Handler...");
+    $(c).mousedown(start)
+      .mousemove(middle)
+      .mouseup(stop)
+      .mouseout(stop);
+    i.text("Bereit. Bitte malen!");
+  });
+</script>
+</body>
+</html>
